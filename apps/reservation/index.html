@@ -94,7 +94,7 @@ nav button.on{color:var(--ac);font-weight:700}
   <div id="fl" style="margin-top:10px"></div>
  </div>
 </section>
-<div class="row" id="act"><button class="sec" onclick="preview()">معاينة</button><button onclick="dlDoc()">تنزيل</button></div>
+<div class="row" id="act"><button class="sec" onclick="preview()">معاينة</button><button onclick="dlDocx()">تنزيل</button></div>
 </main>
 <div id="pv" hidden><div id="pvc"></div><div class="row" style="margin-top:12px"><button class="sec" onclick="copyAll()">نسخ</button><button onclick="$('#pv').hidden=true">إغلاق</button></div></div>
 <nav hidden><button class="on" data-t="t1">الحجز</button><button data-t="t2">القائمة</button></nav>
@@ -160,6 +160,43 @@ function d10(el){let d=el.value.replace(/\D/g,"").slice(0,8),o=d.slice(0,2);if(d
 ["dd","dr","sd"].forEach(k=>{const el=document.querySelector(`[data-k="${k}"]`),m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(el.value);if(m){el.value=m[3]+"/"+m[2]+"/"+m[1];S[k]=el.value}});
 ddEl.addEventListener("input",()=>ss());ss();
 function dlDoc(){preview();const h=$("#pvc").innerHTML;$("#pv").hidden=true;const doc=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>body{font:12pt Georgia,serif}table{width:100%;border-collapse:collapse}th,td{border:1px solid #000;padding:4px;text-align:center}h3{text-align:center}</style></head><body>${h}<\/body><\/html>`;const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff",doc],{type:"application/msword"}));a.download="reservation_"+(V("nom")||"HAKKI").replace(/\s+/g,"_")+".doc";document.body.append(a);a.click();a.remove();toast("تم التنزيل ✓")}
+async function dlDocx(){
+if(!window.JSZip){toast("JSZip غير محمّل – تحقق من الاتصال");return}
+const X=s=>String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const run=(t,b,z)=>`<w:r><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/>${b?"<w:b/>":""}<w:sz w:val="${z||22}"/></w:rPr><w:t xml:space="preserve">${X(t)}</w:t></w:r>`;
+const para=(parts,jc,z,sp)=>`<w:p><w:pPr><w:spacing w:after="${sp==null?80:sp}"/>${jc?`<w:jc w:val="${jc}"/>`:""}</w:pPr>${parts.map(x=>typeof x==="string"?run(x,0,z):run(x[0],x[1],z)).join("")}</w:p>`;
+const kv=(a,b)=>para([a+" : ",[b,1]]);
+const tbl=(rows,head)=>{const n=rows[0].length,w=Math.floor(9400/n),bd=["top","left","bottom","right","insideH","insideV"].map(k=>`<w:${k} w:val="single" w:sz="4" w:space="0" w:color="000000"/>`).join("");return `<w:tbl><w:tblPr><w:tblW w:w="9400" w:type="dxa"/><w:tblBorders>${bd}</w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid>${Array(n).fill(`<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid>${rows.map((r,i)=>`<w:tr>${r.map(c=>`<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/></w:tcPr>${(Array.isArray(c)?c:[c]).map(l=>para([[l,head&&i==0?1:0]],"center",20,20)).join("")}</w:tc>`).join("")}</w:tr>`).join("")}</w:tbl>`+para([""],"",10,0)};
+const dt=k=>{const a=(V(k)||"").split("/");return [a[0]||"",a[1]||"",a[2]||""]};
+const dd=dt("dd"),dr=dt("dr"),sd=V("sd"),P=S.persons.filter(x=>x.a!==false);
+const body=[
+para([["Annexe n°1",1]],"right"),
+para([["Demande de réservation et d’autorisation de sortie",1]],"center",28,160),
+kv("Pôle/Direction Centrale/Direction",V("dir")),kv("Division/Service",V("div")),
+para(["D’un véhicule du parc automobile de l’ONEE-BE"],"center"),
+kv("Mlle, Mme, M.",V("nom")),kv("Fonction",V("fonction")),
+para(["Matricule : ",[V("matricule"),1],"     Entité d’affectation : ",[V("entite"),1]]),
+para(["Titre d’habilitation n° :"]),kv("Date de la dernière visite médicale d’aptitude",V("visite")),
+kv("Objet de la mission",V("objet")),
+para(["Date départ :"]),tbl([["Jour","Mois","Année","Heure"],[dd[0],dd[1],dd[2],V("hd")]],1),
+para(["Date retour :"]),tbl([["Jour","Mois","Année","Heure"],[dr[0],dr[1],dr[2],V("hr")]],1),
+para(["Personnes transportées (ONEE-BE et/ou personnes externes) :"]),
+tbl([["Prénom","NOM","Matricule/N°CNI","Affectation/Organisme"],...P.map(x=>[x.p,x.n,x.m,""])],1),
+kv("Matériel/Produit transporté",V("mat")),
+tbl([["Le demandeur","Le responsable hiérarchique direct","Le Directeur"],[["Date : "+sd,"Signature :",""],["Date : "+sd,"Signature :",""],["Date :","Signature :",""]]],1),
+para([["Rubrique réservée au gestionnaire du parc automobile :",1]]),
+para(["Véhicule attribué : N° ONEE/BE ",[V("onee"),1],"   N° d’immatriculation : ",[V("immat"),1],"   Type : ",[V("type"),1]]),
+kv("Lieu et itinéraire du déplacement",V("iti")),
+tbl([[["Date de départ : "+V("dd"),"Index : "+V("i1")],["Date de retour : "+V("dr"),"Index : "+V("i2")]]])
+].join("");
+const H='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+const doc=H+`<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`;
+const z=new JSZip();
+z.file("[Content_Types].xml",H+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>');
+z.file("_rels/.rels",H+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>');
+z.file("word/document.xml",doc);
+const blob=await z.generateAsync({type:"blob",mimeType:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
+const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="reservation_"+(V("nom")||"HAKKI").replace(/\s+/g,"_")+".docx";document.body.append(a);a.click();a.remove();toast("تم التنزيل ✓")}
 function copyAll(){const v=k=>S[k]||document.querySelector(`[data-k="${k}"]`).value;
  const t=`Réservation véhicule ${v("onee")} (${v("immat")}, ${v("type")})\n${v("nom")} – ${v("matricule")} – ${v("entite")}\nDu ${v("dd")} ${v("hd")} au ${v("dr")} ${v("hr")}\nObjet : ${v("objet")}\nPersonnes : ${S.persons.filter(x=>x.a!==false).map(x=>x.p+" "+x.n).join(", ")}\nMatériel : ${v("mat")}\nItinéraire : ${v("iti")}\nIndex : ${v("i1")} → ${v("i2")}`;
  (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert("تم النسخ")).catch(()=>prompt("انسخ:",t))}
