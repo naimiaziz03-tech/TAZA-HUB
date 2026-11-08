@@ -159,8 +159,7 @@ function d10(el){let d=el.value.replace(/\D/g,"").slice(0,8),o=d.slice(0,2);if(d
 ["dd","dr","visite"].forEach(k=>{const el=document.querySelector(`[data-k="${k}"]`);el.addEventListener("input",()=>{d10(el);S[k]=el.value;save()})});
 ["dd","dr","sd"].forEach(k=>{const el=document.querySelector(`[data-k="${k}"]`),m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(el.value);if(m){el.value=m[3]+"/"+m[2]+"/"+m[1];S[k]=el.value}});
 ddEl.addEventListener("input",()=>ss());ss();
-function dlDoc(){preview();const h=$("#pvc").innerHTML;$("#pv").hidden=true;const doc=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>body{font:12pt Georgia,serif}table{width:100%;border-collapse:collapse}th,td{border:1px solid #000;padding:4px;text-align:center}h3{text-align:center}</style></head><body>${h}<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script>
-</body></html>`;const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff",doc],{type:"application/msword"}));a.download="reservation_"+(V("nom")||"HAKKI").replace(/\s+/g,"_")+".doc";document.body.append(a);a.click();a.remove();toast("تم التنزيل ✓")}
+function dlDoc(){preview();const h=$("#pvc").innerHTML;$("#pv").hidden=true;const doc=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>body{font:12pt Georgia,serif}table{width:100%;border-collapse:collapse}th,td{border:1px solid #000;padding:4px;text-align:center}h3{text-align:center}</style></head><body>${h}<\/body><\/html>`;const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff",doc],{type:"application/msword"}));a.download="reservation_"+(V("nom")||"HAKKI").replace(/\s+/g,"_")+".doc";document.body.append(a);a.click();a.remove();toast("تم التنزيل ✓")}
 function copyAll(){const v=k=>S[k]||document.querySelector(`[data-k="${k}"]`).value;
  const t=`Réservation véhicule ${v("onee")} (${v("immat")}, ${v("type")})\n${v("nom")} – ${v("matricule")} – ${v("entite")}\nDu ${v("dd")} ${v("hd")} au ${v("dr")} ${v("hr")}\nObjet : ${v("objet")}\nPersonnes : ${S.persons.filter(x=>x.a!==false).map(x=>x.p+" "+x.n).join(", ")}\nMatériel : ${v("mat")}\nItinéraire : ${v("iti")}\nIndex : ${v("i1")} → ${v("i2")}`;
  (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert("تم النسخ")).catch(()=>prompt("انسخ:",t))}
@@ -175,5 +174,6 @@ $("#fi").onchange=e=>{[...e.target.files].forEach(f=>st("readwrite").add({name:f
 function openF(id){st("readonly").get(id).onsuccess=e=>{const f=e.target.result,u=URL.createObjectURL(f.blob),a=document.createElement("a");a.href=u;a.download=f.name;a.target="_blank";a.click()}}
 function delF(id){if(confirm("حذف الملف؟"))st("readwrite").delete(id).onsuccess=list}
 </script>
+<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script>
 </body>
 </html>
