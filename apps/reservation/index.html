@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head><script>/*hub-shim*/try{delete Navigator.prototype.serviceWorker}catch(e){}window.__HUB=1;</script><style>#pwaBox{display:none!important}</style>
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Reservation</title>
-
+<link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#1f6feb">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Reservation">
 <link rel="icon" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f5f6f8;--card:#fff;--tx:#1b1f24;--mu:#6a727c;--ac:#1f6feb;--bd:#dde1e6;--ok:#1a7f37}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171b;--card:#1e2328;--tx:#e8ebee;--mu:#9aa3ad;--ac:#5b9dff;--bd:#2f363d;--ok:#3fb950}}
@@ -47,10 +47,10 @@ nav button.on{color:var(--ac);font-weight:700}
 <section class="tab on" id="t1">
  <div class="card"><h2>المستخدم</h2>
   <label>Nom</label><input data-k="nom" value="HAKKI">
-  <label hidden>Fonction</label><input hidden data-k="fonction" value="CHEF EQUIPE POSTE THT/HT">
-  <div class="row" hidden><div><label>Matricule</label><input data-k="matricule" value="82697 Q"></div><div><label>Entité d’affectation</label><input data-k="entite" value="MP TAZA"></div></div>
+  
+  <div class="row" hidden><div><label>Entité d’affectation</label><input data-k="entite" value="MP TAZA"></div></div>
   <div class="row" hidden><div><label>Pôle/Direction</label><input data-k="dir" value="DI/CTR/DTO"></div><div><label>Division/Service</label><input data-k="div" value="XF/XT"></div></div>
-  <details style="margin-top:10px"><summary style="color:var(--mu);font-size:13px;cursor:pointer">Dernière visite médicale</summary><input data-k="visite" value="10/02/2026" inputmode="numeric" maxlength="10" dir="ltr"></details>
+  <details style="margin-top:10px"><summary style="color:var(--mu);font-size:13px;cursor:pointer">Fonction / Matricule / Dernière visite médicale</summary><label>Fonction</label><input data-k="fonction" value="CHEF EQUIPE POSTE THT/HT"><label>Matricule</label><input data-k="matricule" value="82697 Q"><label>Dernière visite médicale</label><input data-k="visite" value="10/02/2026" inputmode="numeric" maxlength="10" dir="ltr"></details>
   <label>Objet de la mission</label><textarea data-k="objet" rows="2"></textarea>
  </div>
  <div class="card"><h2>التواريخ</h2>
@@ -94,7 +94,7 @@ nav button.on{color:var(--ac);font-weight:700}
   <div id="fl" style="margin-top:10px"></div>
  </div>
 </section>
-<div class="row" id="act"><button class="sec" onclick="preview()">معاينة</button><button onclick="saveSnap()">حفظ</button></div>
+<div class="row" id="act"><button class="sec" onclick="preview()">معاينة</button><button onclick="dlDoc()">تنزيل</button></div>
 </main>
 <div id="pv" hidden><div id="pvc"></div><div class="row" style="margin-top:12px"><button class="sec" onclick="copyAll()">نسخ</button><button onclick="$('#pv').hidden=true">إغلاق</button></div></div>
 <nav hidden><button class="on" data-t="t1">الحجز</button><button data-t="t2">القائمة</button></nav>
@@ -159,6 +159,8 @@ function d10(el){let d=el.value.replace(/\D/g,"").slice(0,8),o=d.slice(0,2);if(d
 ["dd","dr","visite"].forEach(k=>{const el=document.querySelector(`[data-k="${k}"]`);el.addEventListener("input",()=>{d10(el);S[k]=el.value;save()})});
 ["dd","dr","sd"].forEach(k=>{const el=document.querySelector(`[data-k="${k}"]`),m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(el.value);if(m){el.value=m[3]+"/"+m[2]+"/"+m[1];S[k]=el.value}});
 ddEl.addEventListener("input",()=>ss());ss();
+function dlDoc(){preview();const h=$("#pvc").innerHTML;$("#pv").hidden=true;const doc=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>body{font:12pt Georgia,serif}table{width:100%;border-collapse:collapse}th,td{border:1px solid #000;padding:4px;text-align:center}h3{text-align:center}</style></head><body>${h}<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script>
+</body></html>`;const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff",doc],{type:"application/msword"}));a.download="reservation_"+(V("nom")||"HAKKI").replace(/\s+/g,"_")+".doc";document.body.append(a);a.click();a.remove();toast("تم التنزيل ✓")}
 function copyAll(){const v=k=>S[k]||document.querySelector(`[data-k="${k}"]`).value;
  const t=`Réservation véhicule ${v("onee")} (${v("immat")}, ${v("type")})\n${v("nom")} – ${v("matricule")} – ${v("entite")}\nDu ${v("dd")} ${v("hd")} au ${v("dr")} ${v("hr")}\nObjet : ${v("objet")}\nPersonnes : ${S.persons.filter(x=>x.a!==false).map(x=>x.p+" "+x.n).join(", ")}\nMatériel : ${v("mat")}\nItinéraire : ${v("iti")}\nIndex : ${v("i1")} → ${v("i2")}`;
  (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert("تم النسخ")).catch(()=>prompt("انسخ:",t))}
@@ -173,6 +175,5 @@ $("#fi").onchange=e=>{[...e.target.files].forEach(f=>st("readwrite").add({name:f
 function openF(id){st("readonly").get(id).onsuccess=e=>{const f=e.target.result,u=URL.createObjectURL(f.blob),a=document.createElement("a");a.href=u;a.download=f.name;a.target="_blank";a.click()}}
 function delF(id){if(confirm("حذف الملف؟"))st("readwrite").delete(id).onsuccess=list}
 </script>
-<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script>
 </body>
 </html>
