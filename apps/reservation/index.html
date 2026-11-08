@@ -1,1 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head><script>/*hub-shim*/try{delete Navigator.prototype.serviceWorker}catch(e){}window.__HUB=1;</script><style>#pwaBox{display:none!important}</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reservation</title>
 
+<meta name="theme-color" content="#1f6feb">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Reservation">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f5f6f8;--card:#fff;--tx:#1b1f24;--mu:#6a727c;--ac:#1f6feb;--bd:#dde1e6;--ok:#1a7f37}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171b;--card:#1e2328;--tx:#e8ebee;--mu:#9aa3ad;--ac:#5b9dff;--bd:#2f363d;--ok:#3fb950}}
+:root[data-theme="dark"]{--bg:#14171b;--card:#1e2328;--tx:#e8ebee;--mu:#9aa3ad;--ac:#5b9dff;--bd:#2f363d;--ok:#3fb950}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;padding-bottom:16px}
+header{padding:14px 16px;background:var(--ac);color:#fff;font-weight:700}
+header small{display:block;font-weight:400;opacity:.9}
+main{padding:12px;max-width:640px;margin:auto}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px;margin-bottom:12px}
+h2{font-size:15px;margin:0 0 8px;color:var(--ac)}
+label{display:block;font-size:13px;color:var(--mu);margin:8px 0 2px}
+input,textarea{width:100%;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
+.row{display:flex;gap:8px}.row>*{flex:1;min-width:0}
+button{border:0;border-radius:8px;padding:10px 14px;background:var(--ac);color:#fff;font:inherit;cursor:pointer}
+button.sec{background:var(--bg);color:var(--tx);border:1px solid var(--bd)}
+button.sm{padding:6px 10px;font-size:14px}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;background:none;color:var(--mu);border-radius:0;padding:12px 4px}
+nav button.on{color:var(--ac);font-weight:700}
+.tab{display:none}.tab.on{display:block}
+.p{display:flex;gap:6px;align-items:center;border-bottom:1px solid var(--bd);padding:6px 0}
+.p span{flex:1}.g{margin:10px 0 4px;font-weight:700}
+.ck{display:flex;gap:6px;align-items:center;margin:4px 0}.ck>span{flex:0 0 42%;font-size:14px}
+.f{display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--bd);padding:8px 0;direction:ltr}
+.f a{flex:1;overflow-wrap:anywhere;color:var(--ac);cursor:pointer}.f small{color:var(--mu)}
+.mu{color:var(--mu);font-size:13px}.ch{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}[hidden]{display:none!important}#pv{position:fixed;inset:0;background:var(--bg);z-index:9;overflow:auto;padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(12px + env(safe-area-inset-bottom,0px))}.pr{display:flex;gap:8px;border-bottom:1px solid var(--bd);padding:6px 0;direction:ltr;font-size:14px}.pr b{flex:0 0 38%}.paper{background:#fff;color:#000;padding:12px;font:13px/1.45 Georgia,serif;border-radius:6px;direction:ltr}.paper table{width:100%;border-collapse:collapse;margin:6px 0}.paper th,.paper td{border:1px solid #000;padding:4px 6px;text-align:center;vertical-align:top;font-size:12px}.paper h3{text-align:center;margin:8px 0}.paper p{margin:6px 0}#mb{background:none;font-size:22px;padding:2px 8px;line-height:1}.p input[type=checkbox]{width:22px;height:22px;flex:none}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+<header style="display:flex;align-items:center;gap:10px"><div style="flex:1">Reservation<small>ONEE-BE · Annexe n°1</small></div><button id="mb" aria-label="القائمة">☰</button></header>
+<main>
+<section class="tab on" id="t1">
+ <div class="card"><h2>المستخدم</h2>
+  <label>Nom</label><input data-k="nom" value="HAKKI">
+  <label hidden>Fonction</label><input hidden data-k="fonction" value="CHEF EQUIPE POSTE THT/HT">
+  <div class="row" hidden><div><label>Matricule</label><input data-k="matricule" value="82697 Q"></div><div><label>Entité d’affectation</label><input data-k="entite" value="MP TAZA"></div></div>
+  <div class="row" hidden><div><label>Pôle/Direction</label><input data-k="dir" value="DI/CTR/DTO"></div><div><label>Division/Service</label><input data-k="div" value="XF/XT"></div></div>
+  <details style="margin-top:10px"><summary style="color:var(--mu);font-size:13px;cursor:pointer">Dernière visite médicale</summary><input data-k="visite" value="10/02/2026" inputmode="numeric" maxlength="10" dir="ltr"></details>
+  <label>Objet de la mission</label><textarea data-k="objet" rows="2"></textarea>
+ </div>
+ <div class="card"><h2>التواريخ</h2>
+  <div class="row"><div><label>Date départ</label><input data-k="dd" value="13/04/2026" inputmode="numeric" maxlength="10" placeholder="jj/mm/aaaa" dir="ltr"></div><div><label>Heure</label><input data-k="hd" value="08:00" inputmode="numeric" maxlength="5" placeholder="HH:MM" dir="ltr"></div></div>
+  <div class="row"><div><label>Date retour</label><input data-k="dr" value="17/04/2026" inputmode="numeric" maxlength="10" placeholder="jj/mm/aaaa" dir="ltr"></div><div><label>Heure</label><input data-k="hr" value="16:30" inputmode="numeric" maxlength="5" placeholder="HH:MM" dir="ltr"></div></div>
+  <label hidden>Dépassement du périmètre de circulation</label>
+  <div class="row" hidden><button class="sec" data-k="perim" data-v="Oui" id="po">Oui</button><button class="sec" data-k="perim" data-v="Non" id="pn">Non</button></div>
+ </div>
+ <div class="card"><h2>الأشخاص المنقولون</h2><div id="pl"></div>
+  <button id="addb" style="width:100%;margin-top:8px" onclick="np(1)">+ إضافة</button>
+  <div id="np" hidden style="margin-top:8px">
+   <div class="row"><input id="pnm" placeholder="NOM" autocomplete="off" oninput="sug()"><button class="sec" style="flex:0 0 52px" onclick="np(0)">✕</button></div>
+   <div id="sg" style="display:flex;flex-direction:column;gap:6px;margin-top:6px"></div>
+   <div id="pd" hidden><div class="row" style="margin-top:8px"><input id="pp" placeholder="Prénom"><input id="pm" placeholder="Matricule/CNI"></div><button onclick="addP()" style="width:100%;margin-top:8px">+ إضافة</button></div>
+  </div>
+  
+  <label hidden>Matériel/Produit transporté</label><input hidden data-k="mat" value="EPI – EPC – CAISSE OUTIL">
+ </div>
+ <div class="card"><h2>قسم مسير حظيرة السيارات</h2>
+  <div class="row"><div hidden><label>N° ONEE/BE</label><input data-k="onee" value="TO 448"></div><div hidden><label>Immatriculation</label><input data-k="immat" value="76119 T 6"></div></div>
+  <div class="row"><div hidden><label>Type</label><input data-k="type" value="TRAFIC"></div><div><label>Index départ</label><input data-k="i1" value="35996" inputmode="numeric" pattern="[0-9]*"></div><div><label>Index retour</label><input data-k="i2" value="36360" inputmode="numeric" pattern="[0-9]*"></div></div>
+  <div class="row"><div><label>Signature demandeur le</label><input data-k="sd" value="13/04/2026" dir="ltr"></div></div>
+  <label>Itinéraire</label><input data-k="iti" value="" placeholder="اختر المدن بالأزرار أو اكتب">
+ </div>
+ 
+</section>
+
+<section class="tab" id="t2" hidden>
+ <div class="card"><h2>Check-list avant / après utilisation</h2>
+  <div class="row"><div><label>Utilisateur</label><input id="cu" readonly></div><div><label>Date</label><input type="date" data-k="cd" value="2026-04-13"></div></div>
+  <div class="row"><div><label>Gestionnaire</label><input value="BOUGHANJA HOUSSEIN" readonly></div><div><label>Matricule</label><input data-k="cm" value="82697 Q"></div></div>
+ </div>
+ <div class="card" id="cl"></div>
+</section>
+
+<section class="tab" id="t3">
+ <div class="card"><h2>ملفات مرجعية</h2>
+  <p class="mu">ارفع صورًا أو وثائق (PDF, Word, Excel…) لتبقى محفوظة في هذا الجهاز كمرجع.</p>
+  <input type="file" id="fi" multiple style="display:none">
+  <button onclick="fi.click()">+ رفع ملفات</button>
+  <div id="fl" style="margin-top:10px"></div>
+ </div>
+</section>
+<div class="row" id="act"><button class="sec" onclick="preview()">معاينة</button><button onclick="saveSnap()">حفظ</button></div>
+</main>
+<div id="pv" hidden><div id="pvc"></div><div class="row" style="margin-top:12px"><button class="sec" onclick="copyAll()">نسخ</button><button onclick="$('#pv').hidden=true">إغلاق</button></div></div>
+<nav hidden><button class="on" data-t="t1">الحجز</button><button data-t="t2">القائمة</button></nav>
+<script>
+const $=s=>document.querySelector(s);
+let S={persons:[{p:"MOUAD",n:"MOGHLI",m:"83677"},{p:"AZIZ",n:"NAIMI",m:"83684"},{p:"Jaouad",n:"Jaghmoum",m:"82021"},{p:"Rachid",n:"Elyaagoubi",m:"76318"}],perim:"",ck:{"Porte arrière gauche":"RAS"}};
+try{const r=localStorage.getItem("resv");if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+function save(){try{localStorage.setItem("resv",JSON.stringify(S))}catch(e){}}
+document.querySelectorAll("[data-k]").forEach(el=>{
+ if(el.tagName==="BUTTON"){el.onclick=()=>{S.perim=el.dataset.v;save();per()};return}
+ if(S[el.dataset.k]!==undefined)el.value=S[el.dataset.k];
+ el.oninput=()=>{S[el.dataset.k]=el.value;save()};
+});
+function per(){[["po","Oui"],["pn","Non"]].forEach(([i,v])=>{const b=$("#"+i);b.style.background=S.perim===v?"var(--ac)":"";b.style.color=S.perim===v?"#fff":""})}per();
+function pl(){S.persons.sort((a,b)=>(parseInt(String(a.m).replace(/\D/g,""))||9e9)-(parseInt(String(b.m).replace(/\D/g,""))||9e9));$("#pl").innerHTML=S.persons.map((x,i)=>`<div class="p" style="opacity:${x.a===false?.45:1}"><input type="checkbox" ${x.a===false?"":"checked"} onchange="tgl(${i},this.checked)" aria-label="تنشيط"><span dir="ltr">${esc(x.p)} ${esc(x.n)} · ${esc(x.m)}</span><button class="sec sm" onclick="delP(${i})">✕</button></div>`).join("")||'<p class="mu">لا أحد</p>'}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function addP(){const p=$("#pp").value.trim(),n=$("#pnm").value.trim(),m=$("#pm").value.trim();if(!p&&!n)return;S.persons.push({p,n,m});S.dir=S.dir||[];if(!dir().some(x=>x.m===m&&x.n===n))S.dir.push({p,n,m});save();pl();np(0)}
+const DIR0=[{p:"MOUAD",n:"MOGHLI",m:"83677"},{p:"AZIZ",n:"NAIMI",m:"83684"},{p:"Jaouad",n:"Jaghmoum",m:"82021"},{p:"Rachid",n:"Elyaagoubi",m:"76318"},{p:"OMAR",n:"HAKKI",m:"82697 Q"}];
+function dir(){const a=[...DIR0,...(S.dir||[])];return a.filter((x,i)=>a.findIndex(y=>y.m===x.m&&y.n===x.n)===i)}
+const nz=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+function np(o){$("#np").hidden=!o;$("#addb").hidden=!!o;$("#pd").hidden=true;$("#sg").innerHTML="";$("#pnm").value=$("#pp").value=$("#pm").value="";if(o)$("#pnm").focus()}
+let _r=[];
+function sug(){const q=nz($("#pnm").value.trim());$("#pd").hidden=true;const g=$("#sg");if(q.length<3){g.innerHTML="";return}const have=S.persons.map(x=>x.m+"|"+x.n);_r=dir().filter(x=>!have.includes(x.m+"|"+x.n)&&(nz(x.n).includes(q)||nz(x.p).includes(q)));g.innerHTML=_r.map((x,i)=>`<button class="sec" onclick="pick(${i})">${esc(x.n)} ${esc(x.p)} · ${esc(x.m)}</button>`).join("")+`<button class="sec" onclick="newP()">+ جديد</button>`}
+function pick(i){const x=_r[i];$("#pnm").value=x.n;$("#pp").value=x.p;$("#pm").value=x.m;$("#sg").innerHTML="";$("#pd").hidden=false}
+function newP(){$("#sg").innerHTML="";$("#pd").hidden=false;$("#pp").focus()}
+function t24(el){let d=el.value.replace(/\D/g,"").slice(0,4);if(d.length>=2&&+d.slice(0,2)>23)d="23"+d.slice(2);if(d.length>2){let m=d.slice(2);if(m.length==2&&+m>59)m="59";d=d.slice(0,2)+":"+m}el.value=d}
+["hd","hr"].forEach(k=>{const el=document.querySelector(`[data-k="${k}"]`);el.addEventListener("input",()=>{t24(el);S[k]=el.value;save()});el.addEventListener("change",()=>{let v=el.value;if(/^\d{1,2}$/.test(v))v=v.padStart(2,"0")+":00";else if(/^\d{2}:\d$/.test(v))v+="0";el.value=v;S[k]=v;save()})});
+function delP(i){S.persons.splice(i,1);save();pl()}
+function tgl(i,v){S.persons[i].a=v;save();pl()}pl();
+const CL={"État des pneus":["État des pneus","Pression des pneus","Pneu de secours"],"Carrosserie":["Pare-chocs avant","Pare-chocs arrière","Malle arrière","Porte avant gauche","Porte arrière gauche","Porte avant droite","Porte arrière droite","Aile avant droite","Aile avant gauche"],"Visibilité":["Pare-brise","Rétroviseurs intérieurs","Rétroviseur ext. droit","Rétroviseur ext. gauche","Essuie-glaces","Identité visuelle de l’Office","Numéro de l’Office","Numéro du PCNS"]};
+function cl(){S.gv=S.gv||{};$("#cl").innerHTML=Object.entries(CL).map(([g,a],n)=>S.gv[g]?`<div class="g" dir="ltr">${g}</div>`+a.map(i=>`<div class="ck" dir="ltr"><span>${i}</span><input data-c="${i}" value="${esc(S.ck[i]||"")}" placeholder="RAS / obs."><button class="sec sm" onclick="ras(this)">RAS</button></div>`).join(""):`<button class="sec" style="width:100%;margin:6px 0" onclick="openG(${n})">+ إضافة: ${g}</button>`).join("");document.querySelectorAll("[data-c]").forEach(el=>el.oninput=()=>{S.ck[el.dataset.c]=el.value;save()})}
+function openG(n){S.gv[Object.keys(CL)[n]]=true;save();cl()}cl();
+
+function ras(b){const i=b.previousElementSibling;i.value="RAS";S.ck[i.dataset.c]="RAS";save()}
+S.h=S.h||{i:["36360","35996"],t:[]};
+const PR=["TAZA – TAZA II – TAZA – TAZA I – TAZA","TAZA – TAZA II – TAZA","TAZA – TAZA I – TAZA"];
+function chips(k,g,pre){const el=document.querySelector(`[data-k="${k}"]`);let c=el.nextElementSibling;if(!c||!c.classList.contains("ch")){c=document.createElement("div");c.className="ch";el.after(c)}const a=[...new Set([...(pre||[]),...S.h[g]])];c.innerHTML=a.map(v=>`<button class="sec sm" data-v="${esc(v)}">${esc(v)}</button>`).join("");c.querySelectorAll("button").forEach(b=>b.onclick=()=>{el.value=b.dataset.v;S[k]=b.dataset.v;save()});el.onchange=()=>{const v=el.value.trim();if(v&&!S.h[g].includes(v)&&!(pre||[]).includes(v)){S.h[g].unshift(v);S.h[g]=S.h[g].slice(0,8);save();chips(k,g,pre)}}}
+
+(()=>{const el=document.querySelector('[data-k="iti"]'),c=document.createElement("div");c.className="ch";c.innerHTML=["TAZA","IMZOUREN","AKNOUL","UAF","GUERCIF","TAZAI","TAZAII","OUED AMLIL"].map(v=>`<button class="sec sm">${v}</button>`).join("")+'<button class="sec sm">مسح</button>';el.after(c);[...c.children].forEach((b,i,a)=>b.onclick=()=>{el.value=i===a.length-1?"":(el.value?el.value+" - ":"")+b.textContent;S.iti=el.value;save()})})();
+(()=>{const el=document.querySelector('[data-k="sd"]'),c=document.createElement("div");c.className="ch";c.hidden=true;c.innerHTML='<button class="sec sm">اليوم</button><button class="sec sm">تاريخ الذهاب</button>';el.after(c);const set=v=>{el.value=v;S.sd=v;save()};c.children[0].onclick=()=>set(new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10));c.children[1].onclick=()=>set(document.querySelector('[data-k="dd"]').value)})();
+$("#mb").onclick=()=>{const o=$("#t3").classList.contains("on");document.querySelectorAll("nav button,.tab").forEach(e=>e.classList.remove("on"));if(o){$("#t1").classList.add("on");document.querySelector('nav [data-t="t1"]').classList.add("on");$("#mb").textContent="☰";$("#act").hidden=false}else{$("#t3").classList.add("on");$("#mb").textContent="✕";$("#act").hidden=true}scrollTo(0,0)};
+function su(){$("#cu").value=document.querySelector('[data-k="nom"]').value}su();document.querySelector('[data-k="nom"]').addEventListener("input",su);
+function V(k){const el=document.querySelector(`[data-k="${k}"]`);return el?el.value:""}
+function R(a,b){return `<div class="pr"><b>${a}</b><span>${esc(b||"—")}</span></div>`}
+function preview(){const P=S.persons.filter(x=>x.a!==false).map(x=>x.p+" "+x.n+" ("+x.m+")").join(", ");
+let h="<h2>Annexe n°1 – Demande de réservation</h2>"+R("Nom",V("nom"))+R("Fonction",V("fonction"))+R("Matricule",V("matricule"))+R("Entité",V("entite"))+R("Pôle/Direction",V("dir"))+R("Division/Service",V("div"))+R("Visite médicale",V("visite"))+R("Objet",V("objet"))+R("Départ",V("dd")+" "+V("hd"))+R("Retour",V("dr")+" "+V("hr"))+R("Personnes",P)+R("Véhicule",[V("onee"),V("immat"),V("type")].filter(Boolean).join(" · "))+R("Matériel",V("mat"))+R("Itinéraire",V("iti"))+R("Index",[V("i1"),V("i2")].filter(Boolean).join(" → "))+R("Signature le",V("sd"));
+
+
+$("#pvc").innerHTML=h;$("#pv").hidden=false}
+function toast(m){const d=document.createElement("div");d.textContent=m;d.style.cssText="position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:var(--ok);color:#fff;padding:10px 18px;border-radius:20px;z-index:20";document.body.append(d);setTimeout(()=>d.remove(),1600)}
+function saveSnap(){document.querySelectorAll("input[data-k],textarea[data-k]").forEach(el=>S[el.dataset.k]=el.value);save();toast("تم الحفظ ✓")}
+const fd=v=>v||"";
+function preview(){const P=S.persons.filter(x=>x.a!==false),b=s=>`<b>${esc(s||"")}</b>`,dt=(d,h)=>{const a=(V(d)||"").split("/");return `<table><tr><th>Jour</th><th>Mois</th><th>Année</th><th>Heure</th></tr><tr><td>${a[0]||""}</td><td>${a[1]||""}</td><td>${a[2]||""}</td><td>${esc(V(h))}</td></tr></table>`};
+$("#pvc").innerHTML=`<div class="paper"><div style="text-align:right"><b>Annexe n°1</b></div><h3>Demande de réservation et d’autorisation de sortie</h3><p>Pôle/Direction Centrale/Direction : ${b(V("dir"))}<br>Division/Service : ${b(V("div"))}</p><p style="text-align:center">D’un véhicule du parc automobile de l’ONEE-BE</p><p>Mlle, Mme, M. : ${b(V("nom"))}<br>Fonction : ${b(V("fonction"))}<br>Matricule : ${b(V("matricule"))} &nbsp; Entité d’affectation : ${b(V("entite"))}<br>Titre d’habilitation n° :<br>Date de la dernière visite médicale d’aptitude : ${b(V("visite"))}</p><p>Objet de la mission : ${b(V("objet"))}</p><p>Date départ :</p>${dt("dd","hd")}<p>Date retour :</p>${dt("dr","hr")}<p>Personnes transportées (ONEE-BE et/ou personnes externes) :</p><table><tr><th>Prénom</th><th>NOM</th><th>Matricule/N°CNI</th><th>Affectation/Organisme</th></tr>${P.map(x=>`<tr><td>${esc(x.p)}</td><td>${esc(x.n)}</td><td>${esc(x.m)}</td><td></td></tr>`).join("")}</table><p>Matériel/Produit transporté : ${b(V("mat"))}</p><table><tr><th>Le demandeur</th><th>Le responsable hiérarchique direct</th><th>Le Directeur</th></tr><tr><td>Date : ${esc(fd(V("sd")))}<br>Signature :<br><br></td><td>Date : ${esc(fd(V("sd")))}<br>Signature :<br><br></td><td>Date :<br>Signature :<br><br></td></tr></table><p><b>Rubrique réservée au gestionnaire du parc automobile :</b></p><p>Véhicule attribué : N° ONEE/BE ${b(V("onee"))} &nbsp; N° d’immatriculation : ${b(V("immat"))} &nbsp; Type : ${b(V("type"))}<br>Lieu et itinéraire du déplacement : ${b(V("iti"))}</p><table><tr><td>Date de départ : ${esc(fd(V("dd")))}<br>Index : ${esc(V("i1"))}</td><td>Date de retour : ${esc(fd(V("dr")))}<br>Index : ${esc(V("i2"))}</td></tr></table></div>`;$("#pv").hidden=false}
+let RW=null;
+async function words(){if(RW)return RW;const all=await new Promise(r=>{if(!db)return r([]);st("readonly").getAll().onsuccess=e=>r(e.target.result)});const m=new Map(),add=t=>(t.match(/[A-Za-zÀ-ÿ\u0600-\u06FF]{3,}/g)||[]).forEach(w=>m.set(w,(m.get(w)||0)+1));for(const f of all){add(f.name.replace(/\.[^.]+$/,"").replace(/_/g," "));try{const n=f.name.toLowerCase();if(/\.(txt|csv|json|md)$/.test(n))add(await f.blob.text());else if(/\.(docx|xlsx|pptx)$/.test(n)&&window.JSZip){const z=await JSZip.loadAsync(f.blob);for(const p of Object.keys(z.files))if(/^(word\/document|xl\/sharedStrings|ppt\/slides\/slide\d+)\.xml$/.test(p))add((await z.files[p].async("string")).replace(/<[^>]+>/g," "))}}catch(e){}}RW=m;return m}
+const nomEl=document.querySelector('[data-k="nom"]'),ns=document.createElement("div");ns.id="ns";ns.className="ch";nomEl.after(ns);
+nomEl.addEventListener("input",async()=>{const q=nz(nomEl.value.trim());if(q.length<3){ns.innerHTML="";return}const m=await words(),c=new Map(),up=(w,n)=>c.set(w.toUpperCase(),(c.get(w.toUpperCase())||0)+n);[...m.entries()].forEach(([w,n])=>up(w,n));dir().forEach(x=>up(x.n,1));const r=[...c.entries()].filter(([w])=>nz(w).startsWith(q)&&nz(w)!==q).sort((a,b)=>b[1]-a[1]).slice(0,6).map(x=>x[0]);ns.innerHTML=r.map(w=>`<button class="sec sm">${esc(w)}</button>`).join("");[...ns.children].forEach(b=>b.onclick=()=>{nomEl.value=b.textContent;S.nom=b.textContent;save();su();ns.innerHTML=""})});
+const ddEl=document.querySelector('[data-k="dd"]'),sdEl=document.querySelector('[data-k="sd"]');sdEl.readOnly=true;const ss=()=>{sdEl.value=ddEl.value;S.sd=ddEl.value;save()};ddEl.addEventListener("input",ss);ddEl.addEventListener("change",ss);ss();
+["i1","i2"].forEach(k=>{const el=document.querySelector(`[data-k="${k}"]`);el.addEventListener("input",()=>{el.value=el.value.replace(/\D/g,"");S[k]=el.value;save()})});
+function d10(el){let d=el.value.replace(/\D/g,"").slice(0,8),o=d.slice(0,2);if(d.length>2)o+="/"+d.slice(2,4);if(d.length>4)o+="/"+d.slice(4);el.value=o}
+["dd","dr","visite"].forEach(k=>{const el=document.querySelector(`[data-k="${k}"]`);el.addEventListener("input",()=>{d10(el);S[k]=el.value;save()})});
+["dd","dr","sd"].forEach(k=>{const el=document.querySelector(`[data-k="${k}"]`),m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(el.value);if(m){el.value=m[3]+"/"+m[2]+"/"+m[1];S[k]=el.value}});
+ddEl.addEventListener("input",()=>ss());ss();
+function copyAll(){const v=k=>S[k]||document.querySelector(`[data-k="${k}"]`).value;
+ const t=`Réservation véhicule ${v("onee")} (${v("immat")}, ${v("type")})\n${v("nom")} – ${v("matricule")} – ${v("entite")}\nDu ${v("dd")} ${v("hd")} au ${v("dr")} ${v("hr")}\nObjet : ${v("objet")}\nPersonnes : ${S.persons.filter(x=>x.a!==false).map(x=>x.p+" "+x.n).join(", ")}\nMatériel : ${v("mat")}\nItinéraire : ${v("iti")}\nIndex : ${v("i1")} → ${v("i2")}`;
+ (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert("تم النسخ")).catch(()=>prompt("انسخ:",t))}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{$("#mb").textContent="☰";$("#act").hidden=false;document.querySelectorAll("nav button,.tab").forEach(e=>e.classList.remove("on"));b.classList.add("on");$("#"+b.dataset.t).classList.add("on");scrollTo(0,0)});
+// reference files (IndexedDB)
+let db;const rq=indexedDB.open("refs",1);
+rq.onupgradeneeded=()=>rq.result.createObjectStore("f",{keyPath:"id",autoIncrement:true});
+rq.onsuccess=()=>{db=rq.result;list()};
+function st(m){return db.transaction("f",m).objectStore("f")}
+function list(){RW=null;if(!db)return;st("readonly").getAll().onsuccess=e=>{const a=e.target.result;$("#fl").innerHTML=a.map(f=>`<div class="f"><a onclick="openF(${f.id})">${esc(f.name)}</a><small>${Math.ceil(f.blob.size/1024)} KB</small><button class="sec sm" onclick="delF(${f.id})">✕</button></div>`).join("")||'<p class="mu">لا توجد ملفات بعد</p>'}}
+$("#fi").onchange=e=>{[...e.target.files].forEach(f=>st("readwrite").add({name:f.name,blob:f}).onsuccess=list);e.target.value=""};
+function openF(id){st("readonly").get(id).onsuccess=e=>{const f=e.target.result,u=URL.createObjectURL(f.blob),a=document.createElement("a");a.href=u;a.download=f.name;a.target="_blank";a.click()}}
+function delF(id){if(confirm("حذف الملف؟"))st("readwrite").delete(id).onsuccess=list}
+</script>
+<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script>
+</body>
+</html>
