@@ -9,7 +9,8 @@ var APPS = [
     icon: "apps/reservation/icon-192.png",
     path: "apps/reservation/index.html",
     files: ["apps/reservation/index.html", "apps/reservation/icon-192.png", "apps/reservation/icon-512.png"],
-    cdn: ["https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"]
+    cdn: ["https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"],
+    storage: {"ls": ["resv"], "idb": [{"db": "refs", "version": 1, "store": "f", "keyPath": "id", "autoInc": true}]}
   },
   {
     id: "crte",
@@ -20,7 +21,8 @@ var APPS = [
     icon: "apps/crte/icon-crte-192.png",
     path: "apps/crte/index.html",
     files: ["apps/crte/index.html", "apps/crte/icon-crte-192.png", "apps/crte/icon-crte-512.png"],
-    cdn: ["https://cdn.jsdelivr.net/npm/docx-preview@0.3.3/dist/docx-preview.min.js", "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"]
+    cdn: ["https://cdn.jsdelivr.net/npm/docx-preview@0.3.3/dist/docx-preview.min.js", "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"],
+    storage: {"ls": ["crte_*"]}
   },
   {
     id: "mesure",
@@ -31,7 +33,8 @@ var APPS = [
     icon: "apps/mesure/icon-v2-192.png",
     path: "apps/mesure/index.html",
     files: ["apps/mesure/index.html", "apps/mesure/icon-v2-192.png", "apps/mesure/icon-v2-512.png", "apps/mesure/template.docx"],
-    cdn: []
+    cdn: [],
+    storage: {"ls": ["transfo-taza2-*"]}
   },
   {
     id: "postes",
@@ -42,6 +45,7 @@ var APPS = [
     icon: "apps/postes/icon-192.png",
     path: "apps/postes/index.html",
     files: ["apps/postes/index.html", "apps/postes/icon-192.png", "apps/postes/icon-512.png"],
-    cdn: ["https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js", "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js", "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js", "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"]
+    cdn: ["https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js", "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js", "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js", "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"],
+    storage: {"ls": ["emb_at", "go", "secs2"], "idb": [{"db": "sections-app", "version": 1, "store": "kv"}]}
   }
 ];

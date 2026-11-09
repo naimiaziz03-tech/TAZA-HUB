@@ -31,6 +31,14 @@ button{font:inherit;color:inherit}
 .card img{width:52px;height:52px;border-radius:12px;object-fit:cover;background:#fff}
 .card b{font-size:17px;line-height:1.3}
 .card span{font-size:13px;color:var(--mu);line-height:1.4}
+.bk{margin-top:16px;padding:14px;border:1px solid var(--bd);border-radius:16px;background:var(--card);box-shadow:var(--sh)}
+.bk h2{margin:0 0 6px;font-size:16px}
+.bk p{margin:0 0 12px;color:var(--mu);font-size:13px;line-height:1.5}
+.bkrow{display:flex;gap:10px}
+.bkrow button{flex:1;padding:12px 8px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);font-size:14px;font-weight:600;cursor:pointer}
+.bkrow button:first-child{background:var(--ac);border-color:var(--ac);color:#fff}
+.bkrow button:active{opacity:.85}
+.bkrow button:disabled{opacity:.6}
 .ver{margin-top:22px;text-align:center;font-size:12px;color:var(--mu)}
 
 /* القائمة */
@@ -73,6 +81,12 @@ body.app #nav{display:flex}
     <button id="mbtn" aria-label="القائمة">⋮</button>
   </div>
   <div class="grid" id="grid"></div>
+  <div class="bk">
+    <h2>النسخ الاحتياطي الشامل</h2>
+    <p>ملف واحد يضم بيانات كل الأقسام مع الملفات المرجعية والصور، لاسترجاعها في هذا الهاتف أو في هاتف جديد.</p>
+    <div class="bkrow"><button id="b-save">💾 تنزيل نسخة شاملة</button><button id="b-rest">📥 استرجاع نسخة</button></div>
+    <input type="file" id="b-file" accept=".json,application/json" hidden>
+  </div>
   <div class="ver" id="ver"></div>
 </section>
 
@@ -91,7 +105,7 @@ body.app #nav{display:flex}
 <script>
 (function(){
 "use strict";
-var HUB_VER="1.0";
+var HUB_VER="1.1";
 var $=function(s){return document.querySelector(s)};
 var apps=(window.APPS||[]);
 var frames={},cur=null;
@@ -191,6 +205,145 @@ if("serviceWorker" in navigator&&/^https?:/.test(location.protocol)){
     document.addEventListener("visibilitychange",function(){if(!document.hidden)r.update().catch(function(){})});
   }).catch(function(){});
 }
+
+/* ---------- نسخة احتياطية شاملة ---------- */
+function B64(blob){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){var s=String(r.result);res(s.slice(s.indexOf(",")+1))};r.onerror=function(){rej(r.error)};r.readAsDataURL(blob)})}
+function unb64(s){var bin=atob(s),u=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return u}
+async function enc(v){
+  if(v===null||v===undefined)return null;
+  if(typeof v!=="object")return v;
+  if(v instanceof Blob){var o={__t:(typeof File!=="undefined"&&v instanceof File)?"file":"blob",type:v.type,b64:await B64(v)};if(o.__t==="file"){o.name=v.name;o.lm=v.lastModified}return o}
+  if(v instanceof ArrayBuffer)return{__t:"ab",b64:await B64(new Blob([v]))};
+  if(ArrayBuffer.isView(v))return{__t:"ta",c:v.constructor.name,b64:await B64(new Blob([v.buffer.slice(v.byteOffset,v.byteOffset+v.byteLength)]))};
+  if(v instanceof Date)return{__t:"date",v:v.getTime()};
+  if(Array.isArray(v)){var a=[];for(var i=0;i<v.length;i++)a.push(await enc(v[i]));return a}
+  var out={};for(var k in v)if(Object.prototype.hasOwnProperty.call(v,k))out[k]=await enc(v[k]);return out;
+}
+function dec(v){
+  if(v===null||typeof v!=="object")return v;
+  if(Array.isArray(v))return v.map(dec);
+  switch(v.__t){
+    case"blob":return new Blob([unb64(v.b64)],{type:v.type||""});
+    case"file":return new File([unb64(v.b64)],v.name||"file",{type:v.type||"",lastModified:v.lm||Date.now()});
+    case"ab":return unb64(v.b64).buffer;
+    case"ta":{var u=unb64(v.b64),C=window[v.c]||Uint8Array;return new C(u.buffer,0,Math.floor(u.byteLength/(C.BYTES_PER_ELEMENT||1)))}
+    case"date":return new Date(v.v);
+  }
+  var o={};Object.keys(v).forEach(function(k){o[k]=dec(v[k])});return o;
+}
+function lsMatch(p,k){return p.charAt(p.length-1)==="*"?k.indexOf(p.slice(0,-1))===0:k===p}
+function lsKeys(a){
+  var out=[],pats=(a.storage&&a.storage.ls)||[];
+  for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(pats.some(function(p){return lsMatch(p,k)}))out.push(k)}
+  return out;
+}
+/* نفتح قاعدة موجودة فقط، حتى لا ننشئ قاعدة فارغة تفسد التطبيق */
+function openExisting(name){return new Promise(function(res){
+  var r=indexedDB.open(name);
+  r.onupgradeneeded=function(){try{r.transaction.abort()}catch(e){}};
+  r.onsuccess=function(){res(r.result)};
+  r.onerror=function(){res(null)};
+  r.onblocked=function(){res(null)};
+})}
+function createDb(cfg){return new Promise(function(res,rej){
+  var r=indexedDB.open(cfg.db,cfg.version||1);
+  r.onupgradeneeded=function(){var d=r.result;if(!d.objectStoreNames.contains(cfg.store)){var o={};if(cfg.keyPath)o.keyPath=cfg.keyPath;if(cfg.autoInc)o.autoIncrement=true;d.createObjectStore(cfg.store,o)}};
+  r.onsuccess=function(){res(r.result)};
+  r.onerror=function(){rej(r.error)};
+  r.onblocked=function(){rej(new Error("blocked"))};
+})}
+async function readStore(cfg){
+  var db=await openExisting(cfg.db);
+  if(!db)return[];
+  if(!db.objectStoreNames.contains(cfg.store)){db.close();return[]}
+  var rows=await new Promise(function(res,rej){
+    var out=[],rq=db.transaction(cfg.store,"readonly").objectStore(cfg.store).openCursor();
+    rq.onsuccess=function(){var c=rq.result;if(c){out.push({k:c.primaryKey,v:c.value});c.continue()}else res(out)};
+    rq.onerror=function(){rej(rq.error)};
+  });
+  db.close();
+  var done=[];
+  for(var i=0;i<rows.length;i++)done.push({k:rows[i].k,v:await enc(rows[i].v)});
+  return done;
+}
+async function writeStore(cfg,rows){
+  var db=await openExisting(cfg.db);
+  if(!db)db=await createDb(cfg);
+  if(!db.objectStoreNames.contains(cfg.store)){db.close();throw new Error("store missing: "+cfg.store)}
+  await new Promise(function(res,rej){
+    var tx=db.transaction(cfg.store,"readwrite"),os=tx.objectStore(cfg.store);
+    os.clear();
+    rows.forEach(function(r){if(cfg.keyPath)os.put(dec(r.v));else os.put(dec(r.v),r.k)});
+    tx.oncomplete=function(){res()};
+    tx.onerror=function(){rej(tx.error)};
+    tx.onabort=function(){rej(tx.error||new Error("aborted"))};
+  });
+  db.close();
+}
+function two(n){return(n<10?"0":"")+n}
+function stamp(){var d=new Date();return d.getFullYear()+"-"+two(d.getMonth()+1)+"-"+two(d.getDate())+"_"+two(d.getHours())+two(d.getMinutes())}
+function saveFile(blob,name){
+  var f=new File([blob],name,{type:blob.type});
+  if(IOS&&navigator.canShare&&navigator.canShare({files:[f]}))return navigator.share({files:[f]});
+  var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(function(){URL.revokeObjectURL(a.href)},5000);
+  return Promise.resolve();
+}
+async function doBackup(){
+  var b=$("#b-save");b.disabled=true;toast("جارٍ تجهيز النسخة…");
+  try{
+    var bk={app:"taza-hub",v:1,date:new Date().toISOString(),apps:[],ls:{},idb:[]};
+    for(var i=0;i<apps.length;i++){
+      var a=apps[i],s=a.storage||{};
+      if(!(s.ls&&s.ls.length)&&!(s.idb&&s.idb.length))continue;
+      bk.apps.push(a.id);
+      lsKeys(a).forEach(function(k){bk.ls[k]=localStorage.getItem(k)});
+      var dbs=s.idb||[];
+      for(var j=0;j<dbs.length;j++)bk.idb.push({app:a.id,db:dbs[j].db,store:dbs[j].store,rows:await readStore(dbs[j])});
+    }
+    var blob=new Blob([JSON.stringify(bk)],{type:"application/json"});
+    var mb=(blob.size/1048576);
+    await saveFile(blob,"TAZA_backup_"+stamp()+".json");
+    toast("تم تنزيل النسخة ✓ ("+(mb<0.1?"أقل من 0.1":mb.toFixed(1))+" MB)");
+  }catch(e){
+    if(!(e&&e.name==="AbortError"))toast("تعذر إنشاء النسخة");
+  }
+  b.disabled=false;
+}
+async function doRestore(file){
+  var bk;
+  try{bk=JSON.parse(await file.text())}catch(e){toast("الملف غير صالح");return}
+  if(!bk||bk.app!=="taza-hub"||!Array.isArray(bk.apps)){toast("هذا ليس ملف نسخة احتياطية من التطبيق");return}
+  var names=apps.filter(function(a){return bk.apps.indexOf(a.id)>-1}).map(function(a){return a.title});
+  if(!names.length){toast("النسخة لا تحتوي أقسامًا معروفة");return}
+  if(!confirm("سيتم استبدال بيانات الأقسام التالية ببيانات النسخة:\n"+names.join("، ")+"\n\nمتابعة؟"))return;
+  toast("جارٍ الاسترجاع…");
+  try{
+    apps.forEach(function(a){
+      if(bk.apps.indexOf(a.id)<0)return;
+      lsKeys(a).forEach(function(k){localStorage.removeItem(k)});
+    });
+    Object.keys(bk.ls||{}).forEach(function(k){
+      var ok=apps.some(function(a){return bk.apps.indexOf(a.id)>-1&&((a.storage&&a.storage.ls)||[]).some(function(p){return lsMatch(p,k)})});
+      if(ok)localStorage.setItem(k,bk.ls[k]);
+    });
+    for(var i=0;i<apps.length;i++){
+      var a=apps[i];
+      if(bk.apps.indexOf(a.id)<0)continue;
+      var dbs=(a.storage&&a.storage.idb)||[];
+      for(var j=0;j<dbs.length;j++){
+        var e=(bk.idb||[]).filter(function(x){return x.app===a.id&&x.db===dbs[j].db&&x.store===dbs[j].store})[0];
+        await writeStore(dbs[j],e?e.rows:[]);
+      }
+    }
+    toast("تم الاسترجاع ✓");
+    setTimeout(function(){location.replace(location.pathname)},1200);
+  }catch(e){toast("تعذر الاسترجاع كاملًا")}
+}
+$("#b-save").onclick=doBackup;
+$("#b-rest").onclick=function(){$("#b-file").value="";$("#b-file").click()};
+$("#b-file").onchange=function(){if(this.files&&this.files[0])doRestore(this.files[0])};
 
 /* ---------- فتح قسم مباشرة (اختصارات الشاشة الرئيسية) ---------- */
 var q=new URLSearchParams(location.search).get("app");
