@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl"><head><script>/*hub-shim*/try{delete Navigator.prototype.serviceWorker}catch(e){}window.__HUB=1;</script><style>#pwaBox{display:none!important}</style><meta charset="utf-8">
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>اختبار المحول</title>
 <style>
@@ -28,7 +28,7 @@ textarea{min-height:70px}
 .ro input,.ro select,.ro textarea{pointer-events:none;background:var(--ac2)}
 .ltr{direction:ltr;text-align:left}.ltr h2{text-align:left}
 .ln{display:grid;gap:8px;margin:8px 0}
-.f{display:flex;align-items:center;gap:5px;min-width:0}.hr{display:flex;align-items:center;gap:10px;margin-bottom:8px}.hr h1{margin:0}.hr button{padding:2px 10px;font-size:20px}.drop{display:block;border:2px dashed var(--ac);border-radius:12px;padding:18px;text-align:center;color:var(--ac);font-weight:600;margin-top:8px;cursor:pointer}.chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 6px}.chip{padding:3px 10px;font-size:12px;border-radius:14px}.f.dt input{flex:none;width:9.8em}.bt input[data-d]{width:8.5em;min-width:0}.f.sm input{flex:none;width:4.2em;text-align:center}.f span{white-space:nowrap;font-size:12px}.f input{flex:1;min-width:0;padding:6px}
+.f{display:flex;align-items:center;gap:5px;min-width:0}.hr{display:flex;align-items:center;gap:10px;margin-bottom:8px}.hr h1{margin:0}.hr button{padding:2px 10px;font-size:20px}.drop{display:block;border:2px dashed var(--ac);border-radius:12px;padding:18px;text-align:center;color:var(--ac);font-weight:600;margin-top:8px;cursor:pointer}.pgw{direction:ltr;margin:0 auto;overflow:hidden;box-shadow:0 1px 8px rgba(0,0,0,.35)}.chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 6px}.chip{padding:3px 10px;font-size:12px;border-radius:14px}.f.dt input{flex:none;width:9.8em}.bt input[data-d]{width:8.5em;min-width:0}.f.sm input{flex:none;width:4.2em;text-align:center}.f span{white-space:nowrap;font-size:12px}.f input{flex:1;min-width:0;padding:6px}
 .bt{width:100%;border-collapse:collapse}.bt td,.bt th{border:1px solid var(--bd);padding:2px 4px;font-size:12px}
 .bt td:first-child{min-width:128px}.bt input{border:0;background:transparent;padding:6px 3px;min-width:70px}
 .bt th{background:var(--ac2);text-align:center}.bt tr.sh td{font-weight:700;background:var(--ac2)}
@@ -46,10 +46,10 @@ button.okb.on{background:#1f8f4e;border-color:#1f8f4e}button.nob.on{background:#
 #toast{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:8px 14px;border-radius:8px;opacity:0;transition:opacity .2s;z-index:30}
 @media print{main,header,#toast,.ovt{display:none!important}#ov{position:static!important;overflow:visible!important;padding:0}}
 @media print{header,.bar{display:none}section{break-inside:avoid}}
-</style><link rel="icon" href="icon-v2-192.png"><meta name="theme-color" content="#1d5fd0"><link rel="apple-touch-icon" href="icon-v2-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><script>window.PWA=0;if("serviceWorker"in navigator){const had=!!navigator.serviceWorker.controller;let rl=0;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(had&&!rl){rl=1;location.reload()}});addEventListener("load",()=>navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>{r.update();document.addEventListener("visibilitychange",()=>{if(!document.hidden)r.update()})}).catch(()=>{}))}</script></head><body>
+</style><link rel="icon" href="icon-v2-192.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1d5fd0"><link rel="apple-touch-icon" href="icon-v2-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><script>window.PWA=1;if("serviceWorker"in navigator){const had=!!navigator.serviceWorker.controller;let rl=0;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(had&&!rl){rl=1;location.reload()}});addEventListener("load",()=>navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>{r.update();document.addEventListener("visibilitychange",()=>{if(!document.hidden)r.update()})}).catch(()=>{}))}</script></head><body>
 <header><div class="hr"><button id="mn" aria-label="القائمة">☰</button><h1>اختبار المحول</h1></div>
 <div class="tabs"><button id="t1" class="on">إدخال البيانات</button><button id="t2">المرجع</button></div></header>
-<main><div id="note" class="note"></div><div class="bar" id="bar"></div><div id="app"></div><div class="note" style="text-align:center;margin-top:14px">الإصدار 11</div></main>
+<main><div id="note" class="note"></div><div class="bar" id="bar"></div><div id="app"></div><div class="note" style="text-align:center;margin-top:14px">الإصدار 13</div></main>
 <div id="ov" hidden><div class="ovt"><button id="oc">إغلاق</button><button id="op">تحميل</button><button id="os">إرسال</button></div><div id="ovc"></div></div><div id="toast"></div>
 <script>
 const ST=["","OK","Non OK","En défaut","H.S","X","-"];
@@ -105,7 +105,7 @@ let DP=null;addEventListener("beforeinstallprompt",ev=>{ev.preventDefault();DP=e
 const SA=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
 addEventListener("appinstalled",()=>{DP=null;toast("تم التنصيب ✓");updInst()});
 const IOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
-async function forceUpdate(){toast("جارٍ التحديث…");try{parent.postMessage({hostCmd:"update"},location.origin)}catch(_){location.reload()}}
+async function forceUpdate(){try{toast("جارٍ التحديث…");const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()));const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}catch(_){}location.replace(location.pathname+"?u="+Date.now())}
 function updInst(){const x=$("#b7");if(x)x.style.display=(window.PWA&&!SA&&(DP||IOS))?"":"none"}
 function install(){if(DP){DP.prompt();DP=null;updInst();return}showOv('<div class="it" style="display:block"><b>تنصيب التطبيق</b><p>iPhone / Safari: زر المشاركة ← «إضافة إلى الشاشة الرئيسية».</p></div>',0)}
 let AT=0;function persist(){try{localStorage.setItem(K,JSON.stringify(V))}catch(_){}clearTimeout(AT);AT=setTimeout(()=>{if(mode==="in"&&V.poste&&V.travee)saveCur(true)},1500)}
@@ -212,6 +212,44 @@ NV.forEach((n,i)=>[1,2,3,4].forEach(g=>cl(3,i+1,g,v[akey(i,g)]||"")));
 DV.slice(0,7).forEach(([k],i)=>cl(4,i,1,v[k]||""));DV.slice(7).forEach(([k],i)=>cl(5,i,1,v[k]||""));
 cl(6,1,1,v.r_cpt||"…………");cl(7,1,1,v.n_resp||"");cl(7,1,2,"BENSAID");cl(7,1,3,"M.LAMTERKATI");
 [[27,"obs1"],[38,"obs2"],[44,"obs3"]].forEach(([i,k])=>{const o=(v[k]||"").replace(/\s*\n\s*/g," ").trim();if(!o)return;const rs=runs(kids[i]);if(rs.length===1)setT(rs[0],"Observation\u00a0: "+o);else setT(rs[1]," "+o)})}
+const EMU=9525,hx=c=>c&&c!=="auto"?"#"+c:"#000";
+function rend(doc,hdr,ftr,img){
+const K=n=>n?[...n.children]:[],X=(n,t)=>K(n).find(c=>c.localName===t),XS=(n,t)=>K(n).filter(c=>c.localName===t),D=(n,t)=>[...n.getElementsByTagName("*")].filter(e=>e.localName===t);
+const A=(n,a)=>n?n.getAttributeNS(WN,a):null,px=t=>(t/15).toFixed(2)+"px",es=x=>String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const N=(e,a,d)=>{const q=e&&A(e,a);return q!=null&&q!==""?+q:d};let numc=0;
+function rs(rp,mk){const g=n=>(rp&&X(rp,n))||null;let st="";const sz=g("sz")||(mk&&X(mk,"sz"));st+=`font-size:${(sz?+A(sz,"val"):22)*2/3}px;`;
+const fo=g("rFonts")||(mk&&X(mk,"rFonts")),fn=fo&&(A(fo,"ascii")||A(fo,"hAnsi"));st+=fn?`font-family:"${fn}","Liberation Serif",Times,serif;`:"font-family:Calibri,Carlito,Arial,sans-serif;";
+const b=g("b");if(b&&!/^(0|false)$/.test(A(b,"val")||""))st+="font-weight:700;";const i=g("i");if(i&&!/^(0|false)$/.test(A(i,"val")||""))st+="font-style:italic;";
+const u=g("u");if(u&&A(u,"val")!=="none")st+="text-decoration:underline;";const c=g("color");if(c&&A(c,"val")&&A(c,"val")!=="auto")st+=`color:#${A(c,"val")};`;
+if(g("caps"))st+="text-transform:uppercase;";if(g("smallCaps"))st+="font-variant:small-caps;";return st}
+function draw(d){const inl=D(d,"inline")[0],anc=D(d,"anchor")[0];
+if(inl){const ex=D(inl,"extent")[0];if(!D(inl,"blip")[0]||!img)return"";return`<img src="${img}" style="width:${ex.getAttribute("cx")/EMU}px;height:${ex.getAttribute("cy")/EMU}px;display:inline-block;vertical-align:top">`}
+if(anc){const ex=D(anc,"extent")[0],po=n=>{const o=n&&D(n,"posOffset")[0];return o?o.textContent/EMU:0},cx=ex.getAttribute("cx")/EMU,cy=ex.getAttribute("cy")/EMU,tx=D(anc,"txbxContent")[0],ln=D(anc,"ln")[0],lw=ln?(ln.getAttribute("w")||12700)/EMU:1,sc=ln&&D(ln,"srgbClr")[0],col=sc?"#"+sc.getAttribute("val"):"#000";
+const st=`position:absolute;left:${po(D(anc,"positionH")[0])}px;top:${po(D(anc,"positionV")[0])}px;width:${cx}px;`;
+if(tx){const bp=D(anc,"bodyPr")[0],ins=a=>bp?(bp.getAttribute(a)||0)/EMU:0;return`<div style="${st}height:${cy}px;box-sizing:border-box;border:${lw}px solid ${col};background:#fff;padding:${ins("tIns")}px ${ins("rIns")}px ${ins("bIns")}px ${ins("lIns")}px;overflow:hidden">${XS(tx,"p").map(para).join("")}</div>`}
+return`<div style="${st}height:0;border-top:${lw}px solid ${col}"></div>`}return""}
+function run(r,mk){const rp=X(r,"rPr");if(rp&&X(rp,"vanish"))return"";let o="";K(r).forEach(c=>{const n=c.localName;if(n==="t")o+=es(c.textContent);else if(n==="tab")o+="\t";else if(n==="br")o+="\n";else if(n==="drawing")o+=draw(c);else if(n==="AlternateContent"){const d=D(c,"drawing")[0];if(d)o+=draw(d)}});return o?`<span style="${rs(rp,mk)}">${o}</span>`:""}
+function para(p){const pp=X(p,"pPr"),sp=X(pp,"spacing"),jc=A(X(pp,"jc"),"val"),ind=X(pp,"ind"),mk=X(pp,"rPr"),bf=N(sp,"before",0),af=N(sp,"after",200),ln=N(sp,"line",276),rule=(sp&&A(sp,"lineRule"))||"auto";
+let st=`margin:${px(bf)} 0 ${px(af)} 0;white-space:pre-wrap;position:relative;`;st+=rule==="auto"?`line-height:${(ln/240*1.15).toFixed(3)};`:`line-height:${px(ln)};`;
+st+=`text-align:${{center:"center",end:"right",right:"right",both:"justify"}[jc]||"left"};`;
+if(ind){const l=N(ind,"start",N(ind,"left",0)),r=N(ind,"end",N(ind,"right",0)),fl=N(ind,"firstLine",0),h=N(ind,"hanging",0);st+=`margin-left:${px(l)};margin-right:${px(r)};text-indent:${px(fl-h)};`}
+const ms=mk&&X(mk,"sz");st+=`font-size:${(ms?+A(ms,"val"):22)*2/3}px;`;
+let pre="";const np=X(pp,"numPr");if(np&&A(X(np,"numId"),"val")==="2"){const r0=XS(p,"r")[0];pre=`<span style="${rs(r0&&X(r0,"rPr"),mk).replace("text-decoration:underline;","")}">${++numc}-&nbsp;&nbsp;</span>`}
+return`<div style="${st}">${pre}${XS(p,"r").map(r=>run(r,mk)).join("")}&#8203;</div>`}
+function tbl(t){const pr=X(t,"tblPr"),cols=XS(X(t,"tblGrid"),"gridCol").map(c=>+A(c,"w")),tw=N(X(pr,"tblW"),"w",cols.reduce((a,b)=>a+b,0)),ti=N(X(pr,"tblInd"),"w",0),jc=A(X(pr,"jc"),"val"),cm=X(pr,"tblCellMar"),mg=(a,b)=>{const e=cm&&(X(cm,a)||X(cm,b));return e?N(e,"w",0):0},TR=XS(t,"tr");
+const rows=TR.map(tr=>{let gi=0;return XS(tr,"tc").map(tc=>{const pr2=X(tc,"tcPr"),gs=X(pr2,"gridSpan"),vm=X(pr2,"vMerge"),o={tc,pr:pr2,gi,span:gs?+A(gs,"val"):1,vm:vm?(A(vm,"val")==="restart"?"r":"c"):""};gi+=o.span;return o})});
+let h=`<table style="border-collapse:collapse;table-layout:fixed;width:${px(tw)};flex:none;margin-left:${jc==="center"?0:px(ti)};"><colgroup>${cols.map(c=>`<col style="width:${px(c)}">`).join("")}</colgroup>`;
+rows.forEach((row,ri)=>{const trp=X(TR[ri],"trPr"),th=trp&&X(trp,"trHeight");h+=`<tr${th?` style="height:${px(+A(th,"val"))}"`:""}>`;
+row.forEach(c=>{if(c.vm==="c")return;let rsn=1;if(c.vm==="r")for(let k=ri+1;k<rows.length;k++){const q=rows[k].find(x=>x.gi===c.gi);if(q&&q.vm==="c")rsn++;else break}
+const tb=c.pr&&X(c.pr,"tcBorders"),bs=(side,nm)=>{const e=tb&&nm.map(a=>X(tb,a)).find(Boolean);if(!e||/^(nil|none)$/.test(A(e,"val")))return`border-${side}:none;`;return`border-${side}:${Math.max(1,(N(e,"sz",4))/6).toFixed(2)}px solid ${hx(A(e,"color"))};`},va={center:"middle",bottom:"bottom"}[A(X(c.pr,"vAlign"),"val")]||"top",sh=X(c.pr,"shd"),fill=sh&&A(sh,"fill");
+h+=`<td colspan="${c.span}" rowspan="${rsn}" style="${bs("top",["top"])}${bs("left",["start","left"])}${bs("bottom",["bottom"])}${bs("right",["end","right"])}padding:${px(mg("top"))} ${px(mg("end","right"))} ${px(mg("bottom"))} ${px(mg("start","left"))};vertical-align:${va};${fill&&fill!=="auto"?`background:#${fill};`:""}overflow:hidden">${K(c.tc).map(e=>e.localName==="p"?para(e):e.localName==="tbl"?tbl(e):"").join("")}</td>`});h+="</tr>"});
+h+="</table>";return jc==="center"?`<div style="display:flex;justify-content:center">${h}</div>`:h}
+const blk=r=>K(r).map(e=>e.localName==="p"?para(e):e.localName==="tbl"?tbl(e):"").join("");
+return`<div class="pgw"><div class="pg" style="width:793px;box-sizing:border-box;padding:${px(426)} ${px(991)} 30px ${px(1134)};background:#fff;color:#000;direction:ltr;font-family:Calibri,Arial,sans-serif"><div style="min-height:${px(1768-426)}">${blk(hdr.documentElement)}</div>${blk(X(doc.documentElement,"body"))}<div style="position:relative;padding-bottom:24px">${blk(ftr.documentElement)}</div></div></div>`}
+async function docPreview(v){const F=await unzip(b64(TPL)),g=n=>{const e=F.find(x=>x[0]===n);return e&&e[1]},P=u=>new DOMParser().parseFromString(new TextDecoder().decode(u),"application/xml"),doc=P(g("word/document.xml"));fillDoc(doc,v);
+const im=g("word/media/image1.png");return rend(doc,P(g("word/header1.xml")),P(g("word/footer1.xml")),im?URL.createObjectURL(new Blob([im],{type:"image/png"})):"")}
+function fitPg(){const w=document.querySelector(".pgw"),g=document.querySelector(".pg");if(!w||!g)return;const k=Math.min(1,($("#ov").clientWidth-20)/793);g.style.transformOrigin="top left";g.style.transform=`scale(${k})`;w.style.width=793*k+"px";w.style.height=g.offsetHeight*k+"px"}
+addEventListener("resize",fitPg);
 async function buildDocx(v){const F=await unzip(b64(TPL)),i=F.findIndex(x=>x[0]==="word/document.xml");const doc=new DOMParser().parseFromString(new TextDecoder().decode(F[i][1]),"application/xml");fillDoc(doc,v);
 const xml='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'+new XMLSerializer().serializeToString(doc).replace(/^<\?xml[^>]*\?>\s*/,"");F[i][1]=new TextEncoder().encode(xml);return zip(F)}
 const docName=()=>("Fiche_transformateur_"+(V.poste||"").replace(/[^\w-]+/g,"_")+"_"+(V.date||"")).replace(/_+/g,"_")+".docx";
@@ -244,7 +282,7 @@ else{try{V=JSON.parse(localStorage.getItem(K)||"{}")}catch(_){V={}}
 if(!V.date_u)V.date=TODAY;if(!V.freq)V.freq="50";{const m=/^(\d\d)\/(\d\d)\/(\d{4})$/.exec(V.i_date||"");if(m)V.i_date=`${m[3]}-${m[2]}-${m[1]}`;if(!V.i_mode)V.i_mode="date";if(V.i_mode==="date"&&!V.i_date)V.i_date="2014-12-21";if(!V._injc){V._injc=1;if(V.m_inj_t==="1000")V.m_inj_t="";if(V.b_inj_t==="500")V.b_inj_t=""}}
 $("#note").textContent="تُحفظ البيانات تلقائياً على هذا الجهاز.";
 $("#bar").innerHTML='<button id="b4">معاينة</button><button id="b3">فيشة جديدة</button><button id="b7" style="display:none">تنصيب التطبيق</button>';
-$("#b4").onclick=()=>showOv(pv(V),1);
+$("#b4").onclick=async()=>{try{if(typeof DecompressionStream==="undefined")throw 0;showOv(await docPreview(V),1);fitPg()}catch(_){showOv(pv(V),1)}};
 $("#b3").onclick=function(){cf(this,()=>{V={date:TODAY,freq:"50",i_mode:"date",i_date:"2014-12-21"};persist();render()})};$("#b7").onclick=install;updInst();if(window.PWA){$("#bar").insertAdjacentHTML("beforeend",'<button id="b8">تحديث التطبيق</button>');$("#b8").onclick=forceUpdate}}
 render()}
 $("#app").addEventListener("click",ev=>{if(ev.target.closest("#rap")){applyRef();return}const c=ev.target.closest("[data-sg]");if(c&&mode!=="ref"){const k=c.dataset.sg;V[k]=c.dataset.v;const i=document.querySelector(`[data-k="${k}"]`);if(i)i.value=V[k];persist();if(k==="poste"){const d=document.getElementById("dl_travee");if(d)d.outerHTML=dl("travee")}rc();autoFill();return}const x=ev.target.closest("[data-s]");if(!x||mode==="ref")return;const k=x.dataset.s,v=x.dataset.v;V[k]=(V[k]===v&&!x.classList.contains("rd"))?"":v;if(k==="i_mode"){if(v==="blank")V.i_date="";else if(!V.i_date)V.i_date="2014-12-21";persist();render();return}persist();document.querySelectorAll(`[data-s="${k}"]`).forEach(y=>y.classList.toggle("on",V[k]===y.dataset.v))});
