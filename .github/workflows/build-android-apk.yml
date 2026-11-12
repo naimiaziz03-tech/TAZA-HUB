@@ -1,23 +1,18 @@
-
 name: Build Taza Hub Android APK
 
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
-      - master
+    branches: [main, master]
 
 permissions:
   contents: read
 
 jobs:
   build:
-    name: Build Android APK
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -38,26 +33,24 @@ jobs:
           cp icon-192.png icon-512.png icon-maskable-512.png www/
           cp -R apps www/apps
 
-      - name: Create package configuration
+      - name: Create Capacitor package configuration
         run: |
           cat > package.json <<'EOF'
           {
             "name": "taza-hub",
             "version": "1.0.0",
             "private": true,
-            "scripts": {
-              "build:web": "echo Web files prepared successfully"
-            },
             "dependencies": {
-              "@capacitor/core": "^7.4.4"
+              "@capacitor/core": "^7.4.4",
+              "@capacitor/android": "^7.4.4",
+              "@capacitor/filesystem": "^7.1.4",
+              "@capacitor/share": "^7.0.2"
             },
             "devDependencies": {
-              "@capacitor/cli": "^7.4.4",
-              "@capacitor/android": "^7.4.4"
+              "@capacitor/cli": "^7.4.4"
             }
           }
           EOF
-
           cat > capacitor.config.json <<'EOF'
           {
             "appId": "com.tazahub.app",
@@ -70,26 +63,22 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build web assets
-        run: npm run build:web
-
       - name: Add Android platform
         run: npx cap add android
 
-      - name: Sync Android project
+      - name: Sync Android plugins
         run: npx cap sync android
 
-      - name: Build APK
+      - name: Build debug APK
         run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug
 
-      - name: Upload APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: Taza-Hub-Android-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
-          
