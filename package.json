@@ -1,16 +1,17 @@
 {
-  "name": "taza-hub-android",
-  "version": "1.0.0",
-  "private": true,
-  "description": "TAZA Hub Android app wrapper",
-  "scripts": {
-    "build:web": "node -e \"const fs=require('fs');fs.rmSync('www',{recursive:true,force:true});fs.mkdirSync('www',{recursive:true});for(const f of ['index.html','apps.js','sw.js','manifest.webmanifest','icon-192.png','icon-512.png','icon-maskable-512.png'])fs.copyFileSync(f,'www/'+f);fs.cpSync('apps','www/apps',{recursive:true});\""
-  },
-  "dependencies": {
-    "@capacitor/android": "^7.4.4",
-    "@capacitor/core": "^7.4.4"
-  },
-  "devDependencies": {
-    "@capacitor/cli": "^7.4.4"
-  }
+"name": "taza-hub-android",
+"version": "1.0.0",
+"private": true,
+"description": "TAZA Hub Android app wrapper",
+"scripts": {
+"build:web": "node -e "const fs=require('fs');fs.rmSync('www',{recursive:true,force:true});fs.mkdirSync('www',{recursive:true});for(const f of ['index.html','apps.js','sw.js','manifest.webmanifest','icon-192.png','icon-512.png','icon-maskable-512.png'])fs.copyFileSync(f,'www/'+f);fs.cpSync('apps','www/apps',{recursive:true});""
+},
+"dependencies": {
+"@capacitor/android": "^7.4.4",
+"@capacitor/core": "^7.4.4",
+"@capacitor/filesystem": "^7.1.4"
+},
+"devDependencies": {
+"@capacitor/cli": "^7.4.4"
+}
 }
