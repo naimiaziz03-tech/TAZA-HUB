@@ -356,6 +356,6 @@ $("#fi").onchange=e=>{[...e.target.files].forEach(f=>st("readwrite").add({name:f
 function openF(id){st("readonly").get(id).onsuccess=e=>{const f=e.target.result,u=URL.createObjectURL(f.blob),a=document.createElement("a");a.href=u;a.download=f.name;a.target="_blank";a.click()}}
 function delF(id){if(confirm("حذف الملف؟"))st("readwrite").delete(id).onsuccess=list}
 </script>
-<script>if(window.top===window.self&&"serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./sw.js",{scope:"./"}).catch(()=>{}))</script>
+<script>if("serviceWorker" in navigator){addEventListener("load",async()=>{try{const reg=await navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"});await reg.update()}catch(e){console.warn("Service Worker update failed",e)}})}</script>
 </body>
 </html>
