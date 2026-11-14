@@ -1,44 +1,74 @@
 
-const C="reservation-v14",F=["./","index.html","manifest.webmanifest","icon-192.png","icon-512.png"];
+const CACHE_NAME = "reservation-v14";
 
-self.addEventListener("install",e=>
-  e.waitUntil(
-    caches.open(C)
-      .then(c=>c.addAll(F))
-      .then(()=>self.skipWaiting())
-  )
-);
+const ASSETS = [
+  "./",
+  "./index.html",
+  "./manifest.webmanifest",
+  "./icon-192.png",
+  "./icon-512.png"
+];
 
-self.addEventListener("activate",e=>
-  e.waitUntil(
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(ASSETS))
+      .then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener("activate", event => {
+  event.waitUntil(
     caches.keys()
-      .then(k=>Promise.all(
-        k.filter(x=>x!==C).map(x=>caches.delete(x))
-      ))
-      .then(()=>clients.claim())
-  )
-);
+      .then(keys =>
+        Promise.all(
+          keys
+            .filter(key => key !== CACHE_NAME)
+            .map(key => caches.delete(key))
+        )
+      )
+      .then(() => self.clients.claim())
+  );
+});
 
-const put=(rq,res)=>{
-  const cp=res.clone();
-  caches.open(C).then(c=>c.put(rq,cp));
-  return res;
-};
+self.addEventListener("fetch", event => {
+  const request = event.request;
 
-self.addEventListener("fetch",e=>{
-  if(e.request.method!=="GET")return;
+  if (request.method !== "GET") return;
 
-  if(new URL(e.request.url).origin===location.origin){
-    e.respondWith(
-      fetch(e.request,{cache:"reload"})
-        .then(r=>put(e.request,r))
-        .catch(()=>caches.match(e.request)
-          .then(r=>r||caches.match("index.html")))
-    );
-  }else{
-    e.respondWith(
-      caches.match(e.request)
-        .then(r=>r||fetch(e.request).then(res=>put(e.request,res)))
-    );
+  const url = new URL(request.url);
+
+  if (url.origin !== self.location.origin) {
+    return;
   }
+
+  event.respondWith(
+    fetch(request, { cache: "no-cache" })
+      .then(response => {
+        if (response && response.ok) {
+          const copy = response.clone();
+
+          caches.open(CACHE_NAME)
+            .then(cache => cache.put(request, copy));
+        }
+
+        return response;
+      })
+      .catch(() =>
+        caches.match(request).then(cached => {
+          if (cached) return cached;
+
+          if (request.mode === "navigate") {
+            return caches.match("./index.html");
+          }
+
+          return new Response("غير متصل بالإنترنت", {
+            status: 503,
+            headers: {
+              "Content-Type": "text/plain; charset=utf-8"
+            }
+          });
+        })
+      )
+  );
 });
