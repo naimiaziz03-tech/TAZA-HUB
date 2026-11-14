@@ -3,7 +3,7 @@
    لإجبار التحديث غيّر رقم VER. القائمة تُقرأ من apps.js. */
 importScripts("apps.js");
 
-const VER = "tazahub-v2";
+const VER = "tazahub-v3";
 const CORE = ["./", "index.html", "apps.js", "manifest.webmanifest", "icon-192.png", "icon-512.png"];
 
 function appFiles() {
