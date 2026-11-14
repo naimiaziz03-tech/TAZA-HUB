@@ -18,7 +18,7 @@ const mask=v=>{v=v.replace(/\D/g,'').slice(0,8);return v.length>4?v.slice(0,2)+'
 const dm2iso=v=>{const m=String(v||'').match(/^(\d\d)\/(\d\d)\/(\d{4})$/);return m?m[3]+'-'+m[2]+'-'+m[1]:''};
 function inp(t,val,at){if(t=='date')return `<input type="date" class="dt" ${at} value="${dm2iso(val)}">`;const x=t=='tk'?'type="text" inputmode="numeric" class="tk"':`type="${t}" step="any" inputmode="decimal"`;return `<input ${x} ${at} value="${val??''}">`}
 function wire(i,get){i.oninput=()=>{let v=i.value;if(i.classList.contains('dt'))v=i.value?i.value.split('-').reverse().join('/'):'';else if(i.classList.contains('tk'))v=i.value=v.replace(/[^\d\/]/g,'');else if(i.type=='number')v=v!==''?+v:'';get(v);sv();sum()}}
-function build(){const fld=([k,l,t])=>`<div><label>${l}</label>${inp(t,S.h[k],`data-h="${k}"`)}`;
+function build(){const fld=([k,l,t])=>`<div><label>${l}</label>${inp(t,S.h[k],`data-h="${k}"`)}</div>`;
 let h='<div class="card"><details><summary>▼ معلومات المركبة</summary><div class="g" style="margin-top:8px">';
 HF.filter(x=>x[0]!='A5'&&x[0]!='M2').forEach(x=>h+=fld(x));
 h+='</div></details></div><div class="card"><h2>استهلاك الوقود (7 أسطر كحد أقصى)</h2><div id="rows"></div><div class="bar"><button class="s" id="ar">+ إضافة سطر</button></div><div class="sum" id="sm"></div></div><button id="nw" class="s">ملف جديد</button>';
@@ -61,4 +61,3 @@ z.remove('xl/calcChain.xml');for(const [p,re] of [['xl/_rels/workbook.xml.rels',
 dl(await z.generateAsync({type:'blob',mimeType:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),'TO448_-_10-2026_rempli.xlsx')};
 window.addEventListener('pagehide',sv);document.addEventListener('visibilitychange',sv);
 build();
-
