@@ -319,5 +319,20 @@ $("#fi").onchange=e=>{[...e.target.files].forEach(f=>st("readwrite").add({name:f
 function openF(id){st("readonly").get(id).onsuccess=e=>{const f=e.target.result,u=URL.createObjectURL(f.blob),a=document.createElement("a");a.href=u;a.download=f.name;a.target="_blank";a.click()}}
 function delF(id){if(confirm("حذف الملف؟"))st("readwrite").delete(id).onsuccess=list}
 </script>
+ <script>
+(function(){
+  var P={"HAKKI":{nom:"HAKKI",matricule:"82697 Q",entite:"MP TAZA",titre:"82697/01/2026"},
+         "BENSAID":{nom:"BENSAID",matricule:"79246",entite:"MP TAZA",titre:"79246/01/2026"}};
+  function A(v){v=(v||"").trim().toUpperCase();var p=P[v];if(!p)return;
+    var m=document.querySelector('[data-k="matricule"]');if(m)m.value=p.matricule;
+    var e=document.querySelector('[data-k="entite"]');if(e)e.value=p.entite;
+    var t=document.querySelector('[data-k="titre"]');if(t)t.value=p.titre;
+    var n=document.querySelector('[data-k="nom"]');if(n&&n.value.trim().toUpperCase()!==v)n.value=p.nom;}
+  var i=document.getElementById("nomInput");
+  if(i){i.addEventListener("input",function(){A(i.value)});
+        i.addEventListener("change",function(){A(i.value)});
+        A(i.value);}
+})();
+ </script>
 </body>
 </html>
