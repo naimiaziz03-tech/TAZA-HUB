@@ -1,5 +1,5 @@
 
-const CACHE_NAME = "reservation-v14";
+const CACHE_NAME = "reservation-v15";
  2.-work/rapport-mensual-integration
 
 const APP_CACHE_PREFIX = "reservation-";
