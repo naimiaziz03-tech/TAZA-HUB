@@ -321,17 +321,65 @@ function delF(id){if(confirm("حذف الملف؟"))st("readwrite").delete(id).o
 </script>
  <script>
 (function(){
-  var P={"HAKKI":{nom:"HAKKI",matricule:"82697 Q",entite:"MP TAZA",titre:"82697/01/2026"},
-         "BENSAID":{nom:"BENSAID",matricule:"79246",entite:"MP TAZA",titre:"79246/01/2026"}};
-  function A(v){v=(v||"").trim().toUpperCase();var p=P[v];if(!p)return;
-    var m=document.querySelector('[data-k="matricule"]');if(m)m.value=p.matricule;
-    var e=document.querySelector('[data-k="entite"]');if(e)e.value=p.entite;
-    var t=document.querySelector('[data-k="titre"]');if(t)t.value=p.titre;
-    var n=document.querySelector('[data-k="nom"]');if(n&&n.value.trim().toUpperCase()!==v)n.value=p.nom;}
-  var i=document.getElementById("nomInput");
-  if(i){i.addEventListener("input",function(){A(i.value)});
-        i.addEventListener("change",function(){A(i.value)});
-        A(i.value);}
+  var PROFILS = {
+    "HAKKI": {
+      nom: "HAKKI",
+      matricule: "82697 Q",
+      entite: "MP TAZA",
+      fonction: "CHEF EQUIPE POSTE THT/HT",
+      titre: "82697/01/2026"
+    },
+    "BENSAID": {
+      nom: "BENSAID",
+      matricule: "79246",
+      entite: "MP TAZA",
+      fonction: "CHEF SECTION/MP TAZA",
+      titre: "79246/01/2026"
+    }
+  };
+
+  function appliquer(nomSaisi){
+    var cle = (nomSaisi || "").trim().toUpperCase();
+    var p = PROFILS[cle];
+    if(!p) return;
+
+    var m = document.querySelector('[data-k="matricule"]');
+    if(m) m.value = p.matricule;
+
+    var e = document.querySelector('[data-k="entite"]');
+    if(e) e.value = p.entite;
+
+    var f = document.querySelector('[data-k="fonction"]');
+    if(f) f.value = p.fonction;
+
+    var t = document.querySelector('[data-k="titre"]');
+    if(t) t.value = p.titre;
+
+    var n = document.querySelector('[data-k="nom"]');
+    if(n && n.value.trim().toUpperCase() !== cle) n.value = p.nom;
+
+    try{
+      var s = JSON.parse(localStorage.getItem("resa") || "{}");
+      s.matricule = p.matricule;
+      s.entite = p.entite;
+      s.fonction = p.fonction;
+      s.titre = p.titre;
+      localStorage.setItem("resa", JSON.stringify(s));
+    }catch(_){}
+  }
+
+  var inp = document.getElementById("nomInput");
+  if(inp){
+    inp.addEventListener("input", function(){
+      var v = inp.value.trim().toUpperCase();
+      if(PROFILS[v]) appliquer(v);
+    });
+    inp.addEventListener("change", function(){
+      var v = inp.value.trim().toUpperCase();
+      if(PROFILS[v]) appliquer(v);
+    });
+    if(PROFILS[inp.value.trim().toUpperCase()]) appliquer(inp.value.trim());
+  }
 })();
  </script>
 </body>
