@@ -319,6 +319,5 @@ $("#fi").onchange=e=>{[...e.target.files].forEach(f=>st("readwrite").add({name:f
 function openF(id){st("readonly").get(id).onsuccess=e=>{const f=e.target.result,u=URL.createObjectURL(f.blob),a=document.createElement("a");a.href=u;a.download=f.name;a.target="_blank";a.click()}}
 function delF(id){if(confirm("حذف الملف؟"))st("readwrite").delete(id).onsuccess=list}
 </script>
-const APP_CACHE_PREFIX = "reservation-";
 </body>
 </html>
