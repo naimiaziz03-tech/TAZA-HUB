@@ -1,4 +1,11 @@
+ 2.-work/rapport-mensual-integration
+
 const CACHE_NAME = "reservation-v15";
+ 2.-work/rapport-mensual-integration
+
+
+const CACHE_NAME = "reservation-v15";
+ main
 const APP_CACHE_PREFIX = "reservation-";
 
 const ASSETS = [
