@@ -47,11 +47,12 @@ nav button.on{color:var(--ac);font-weight:700}
 <main>
 <section class="tab on" id="t1">
  <div class="card"><h2>المستخدم</h2>
-  <label>Nom</label><input data-k="nom" value="HAKKI">
+  <label>Nom</label><input data-k="nom" id="nomInput" value="HAKKI" autocomplete="off">
   
   <div class="row" hidden><div><label>Entité d’affectation</label><input data-k="entite" value="MP TAZA"></div></div>
   <div class="row" hidden><div><label>Pôle/Direction</label><input data-k="dir" value="DI/CTR/DTO"></div><div><label>Division/Service</label><input data-k="div" value="XF/XT"></div></div>
   <details style="margin-top:10px"><summary style="color:var(--mu);font-size:13px;cursor:pointer">Fonction / Matricule / Titre d’habilitation / Dernière visite médicale</summary><label>Fonction</label><input data-k="fonction" value="CHEF EQUIPE POSTE THT/HT"><label>Matricule</label><input data-k="matricule" value="82697 Q"><label>Titre d’habilitation n°</label><input data-k="titre" value="82697/01/2026" dir="ltr"><label>Dernière visite médicale</label><input data-k="visite" value="10/02/2026" inputmode="numeric" maxlength="10" dir="ltr"></details>
+  <details style="margin-top:10px"><summary style="color:var(--mu);font-size:13px;cursor:pointer">Fonction / Matricule / Dernière visite médicale</summary><label>Fonction</label><input data-k="fonction" value="CHEF EQUIPE POSTE THT/HT"><label>Matricule</label><input data-k="matricule" value="82697 Q"><label>Titre d'habilitation</label><input data-k="titre" value="82697/01/2026" dir="ltr"><label>Dernière visite médicale</label><input data-k="visite" value="10/02/2026" inputmode="numeric" maxlength="10" dir="ltr"></details>
   <label>Objet de la mission</label><textarea data-k="objet" rows="2"></textarea>
  </div>
  <div class="card"><h2>التواريخ</h2>
@@ -362,6 +363,72 @@ $("#fi").onchange=e=>{[...e.target.files].forEach(f=>st("readwrite").add({name:f
 function openF(id){st("readonly").get(id).onsuccess=e=>{const f=e.target.result,u=URL.createObjectURL(f.blob),a=document.createElement("a");a.href=u;a.download=f.name;a.target="_blank";a.click()}}
 function delF(id){if(confirm("حذف الملف؟"))st("readwrite").delete(id).onsuccess=list}
 </script>
+ 2.-work/rapport-mensual-integration
 <script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script>
+
+ <script>
+(function(){
+  var PROFILS = {
+    "HAKKI": {
+      nom: "HAKKI",
+      matricule: "82697 Q",
+      entite: "MP TAZA",
+      fonction: "CHEF EQUIPE POSTE THT/HT",
+      titre: "82697/01/2026"
+    },
+    "BENSAID": {
+      nom: "BENSAID",
+      matricule: "79246",
+      entite: "MP TAZA",
+      fonction: "CADRE POSTE THT/HT",
+      titre: "79246/01/2026"
+    }
+  };
+
+  function appliquer(nomSaisi){
+    var cle = (nomSaisi || "").trim().toUpperCase();
+    var p = PROFILS[cle];
+    if(!p) return;
+
+    var m = document.querySelector('[data-k="matricule"]');
+    if(m) m.value = p.matricule;
+
+    var e = document.querySelector('[data-k="entite"]');
+    if(e) e.value = p.entite;
+
+    var f = document.querySelector('[data-k="fonction"]');
+    if(f) f.value = p.fonction;
+
+    var t = document.querySelector('[data-k="titre"]');
+    if(t) t.value = p.titre;
+
+    var n = document.querySelector('[data-k="nom"]');
+    if(n && n.value.trim().toUpperCase() !== cle) n.value = p.nom;
+
+    try{
+      var s = JSON.parse(localStorage.getItem("resa") || "{}");
+      s.matricule = p.matricule;
+      s.entite = p.entite;
+      s.fonction = p.fonction;
+      s.titre = p.titre;
+      localStorage.setItem("resa", JSON.stringify(s));
+    }catch(_){}
+  }
+
+  var inp = document.getElementById("nomInput");
+  if(inp){
+    inp.addEventListener("input", function(){
+      var v = inp.value.trim().toUpperCase();
+      if(PROFILS[v]) appliquer(v);
+    });
+    inp.addEventListener("change", function(){
+      var v = inp.value.trim().toUpperCase();
+      if(PROFILS[v]) appliquer(v);
+    });
+    if(PROFILS[inp.value.trim().toUpperCase()]) appliquer(inp.value.trim());
+  }
+})();
+ </script>
+ main
 </body>
 </html>
