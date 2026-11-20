@@ -120,5 +120,27 @@ var APPS = [
     storage: {
       "ls": []
     }
+  },
+  {
+    id: "ordre-mission",
+    title: "أمر المهمة",
+    short: "OM",
+    sub: "Ordre de Mission + Compte Rendu de Mission",
+    color: "#1565c0",
+    icon: "apps/ordre-mission/icon-192.png",
+    path: "apps/ordre-mission/index.html",
+    files: [
+      "apps/ordre-mission/index.html",
+      "apps/ordre-mission/manifest.webmanifest",
+      "apps/ordre-mission/icon-192.png",
+      "apps/ordre-mission/icon-512.png"
+    ],
+    cdn: [
+      "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js",
+      "https://cdn.jsdelivr.net/npm/docx-preview@0.4.1/dist/docx-preview.min.js"
+    ],
+    storage: {
+      "ls": ["om-app-v4"]
+    }
   }
 ];

@@ -2,7 +2,7 @@
 /* TAZA HUB — Service Worker */
 importScripts("./apps.js");
 
-const VER = "tazahub-v5";
+const VER = "tazahub-v6";
 const CORE = [
   "./",
   "index.html",
